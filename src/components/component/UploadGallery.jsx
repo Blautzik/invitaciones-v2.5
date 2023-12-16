@@ -141,7 +141,7 @@ const EventForm = () => {
             <CoverUpload setCoverImage={setCoverImage} coverImage={coverImage}/>
 
 
-
+{/* 
             <div className="mb-4">
                 <label htmlFor="detailImages" className="block text-gray-700">
                     Mas Imágenes
@@ -153,7 +153,7 @@ const EventForm = () => {
                     onChange={handleDetailImagesChange}
                     className="w-full"
                 />
-            </div>
+            </div> */}
 
 
 
