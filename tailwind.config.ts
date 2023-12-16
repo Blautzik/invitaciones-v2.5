@@ -12,9 +12,17 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+
+      },
+      backgroundColor: {
+        'primary': 'var(--background-start-rgb)',
+        'btn-bg-rgb': 'var(--btn-bg-rgb)',
+      },
+      textColor: {
+        'primary-foreground': 'var(--foreground-rgb)',
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 }
 export default config
