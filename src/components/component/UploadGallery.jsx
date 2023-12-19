@@ -8,7 +8,8 @@ import { CoverUpload } from './cover-upload';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import Link from 'next/link';
-import { DatePicker, FechaYHora } from './DatePicker';
+import { DatePicker} from './DatePicker';
+import { HourPicker } from './hour-picker';
 
 
 
@@ -133,12 +134,15 @@ const EventForm = () => {
 
                 <Label htmlFor="nombre">Fecha y Hora: </Label> <span className='text-sm text-gray-500'>Elegí la fecha y hora del evento </span>
                 <DatePicker setFecha={setFecha}/>
+                <HourPicker />
                 </div>
               </div>
             </form>
 
+            <div className='mt-5'>
 
-            <CoverUpload setCoverImage={setCoverImage} coverImage={coverImage}/>
+                <CoverUpload setCoverImage={setCoverImage} coverImage={coverImage}/>
+            </div>
 
 
 {/* 
