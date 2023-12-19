@@ -1,29 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; 
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 
 
-
-
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app)
-export const storage = getStorage(app)
-
-
-const auth = getAuth(app);
-
-export default async function signIn(email, password) {
-    let result = null,
-        error = null;
-    try {
-        result = await signInWithEmailAndPassword(auth, email, password);
-    } catch (e) {
-        error = e;
-    }
-
-    return { result, error };
-}
 
 export const salones = [
     { nombre: "Jano’s Avellaneda", direccion: "Gral. Güemes 897, 1824 Avellaneda, Buenos Aires", link_maps: "http://maps.google.com/?q=Jano's+Avellaneda", foto_salon: 'https://res.cloudinary.com/fedexx/image/upload/v1702987790/salones/avellaneda.png' },
@@ -74,19 +50,4 @@ export const salones = [
     { nombre: "Jano’s Caba", direccion: "Bartolomé Mitre 12651, CABA", link_maps: "http://maps.google.com/?q=Jano's+Caba", foto_salon: 'https://res.cloudinary.com/fedexx/image/upload/v1702988557/salones/caba.png' },
     { nombre: "Jano’s City", direccion: "Hipolito Yrigoyen 399, Jose C Paz", link_maps: "http://maps.google.com/?q=Jano's+City", foto_salon: 'https://res.cloudinary.com/fedexx/image/upload/v1702988575/salones/city.png' }
 ];
-
-
-const uploadSalonesToFirebase = async (salones) => {
-  try {
-    const salonRef = collection(db, 'salones');
-
-    for (const salon of salones) {
-      await addDoc(salonRef, salon);
-    }
-
-    console.log('Salones uploaded to Firebase Firestore successfully.');
-  } catch (error) {
-    console.error('Error uploading salones to Firebase:', error);
-  }
-};
 
