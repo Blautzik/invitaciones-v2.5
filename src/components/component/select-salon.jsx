@@ -9,45 +9,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function SelectSalon({ salones }) {
+export function SelectSalon({ salones, setASelectIsOpen }) {
   const [selectedSalon, setSelectedSalon] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const dropdownRef = useRef(null);
+  const ref = useRef(null);
 
-  useEffect(() => {
-    // Attach click event listener to document to handle clicks outside the dropdown
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownVisible(false);
-      }
-    };
 
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      // Remove event listener on component unmount
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
-  const handleSelectTriggerClick = () => {
-    // Toggle dropdown visibility on SelectTrigger click
-    setIsDropdownVisible((prev) => !prev);
-  };
+    const handleSelectTriggerClick = ()=>{
+     
+    }
 
   const handleSalonSelect = (salon) => {
+    console.log(salon)
     setSelectedSalon(salon);
-    // Close dropdown after a brief delay
-    setTimeout(() => {
-      setIsDropdownVisible(false);
-    }, 100);
   };
 
   return (
     <div>
       <label>Email</label>
-      <Select>
-        <SelectTrigger onClick={handleSelectTriggerClick}>
+      <Select onOpenChange={(open) => handleSelectTriggerClick(open)}
+        
+      >
+        <SelectTrigger >
           <SelectValue placeholder="Select a salon" />
         </SelectTrigger>
         {isDropdownVisible && (
@@ -62,7 +45,9 @@ export function SelectSalon({ salones }) {
             }}
           ></div>
         )}
-        <SelectContent visible={isDropdownVisible.toString()} ref={dropdownRef}>
+        <SelectContent
+            ref={(ref) => ref?.addEventListener('touchend', (e) => e.preventDefault())}
+        >
           {salones.map((salon) => (
             <SelectItem
               key={salon.foto_salon}

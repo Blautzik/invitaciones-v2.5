@@ -8,15 +8,17 @@ import { CoverUpload } from './cover-upload';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import Link from 'next/link';
-import { DatePicker} from './DatePicker';
+import { DatePicker } from './DatePicker';
 import { HourPicker } from './hour-picker';
 import { salones } from '@/app/data/salones';
-import {SelectSalon} from '../component/select-salon'
+import { SelectSalon } from '../component/select-salon'
+import clsx from 'clsx';
 
 
 
 
 const EventForm = () => {
+    const [aSelectIsOpen, setASelectIsOpen] = useState(false)
     const [clientes, setClientes] = useState([]);
     const [nombre, setNombre] = useState('');
     const [fecha, setFecha] = useState('')
@@ -56,6 +58,8 @@ const EventForm = () => {
         fetchProducts();
     }, []);
 
+    
+
     const handleCoverImageChange = (e) => {
         setCoverImage(e.target.files[0]);
     };
@@ -76,7 +80,7 @@ const EventForm = () => {
                 fecha
             };
 
-     
+
             const docRef = await addDoc(eventRef, newEvent);
 
 
@@ -119,39 +123,51 @@ const EventForm = () => {
 
     return (
         <div className="bg-gray-100 rounded-lg shadow-lg max-w-lg mx-auto">
+            {aSelectIsOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        zIndex: 1000,
+                        pointerEvents:'none' // Adjust the z-index as needed
+                    }}
+                ></div>
+            )}
             <h2 className="text-2xl text-center font-semibold p-6 pt-12">Invitacion Interactiva</h2>
 
             <p className='mx-4 pb-8 text-center border-b border-gray-300 mb-4 '>Te invitamos a completar toda la información necesaria para generar tu invitación interactiva. <br /> Les recomendamos mirar <Link className='underline' href={'https://invitacionesjanos.com.ar/6/muestraboda'}> <strong> Este ejemplo </strong> </Link> para entender cómo es el servicio y cómo queda organizada la información dentro de la tarjeta.</p>
             <form onSubmit={handleCreateProduct}>
-              <div className="space-y-4 px-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" placeholder="tumail@ejemplo.com" required type="email" onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="nombre">Nombre:</Label> <span className='text-sm text-gray-500'>Como quieran que aparezca en la invitacion </span>
-                  
-                  <Input id="nombre" required placeholder='ej: Agus o Agustina' type="text" onChange={(e) => setNombre(e.target.value)} />
-                </div>
-                <div className='space-y-2'>
+                <div className="space-y-4 px-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" placeholder="tumail@ejemplo.com" required type="email" onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="nombre">Nombre:</Label> <span className='text-sm text-gray-500'>Como quieran que aparezca en la invitacion </span>
 
-                <Label htmlFor="nombre">Fecha y Hora: </Label> <span className='text-sm text-gray-500'>Elegí la fecha y hora del evento </span>
-                <DatePicker setFecha={setFecha}/>
-                <HourPicker />
+                        <Input id="nombre" required placeholder='ej: Agus o Agustina' type="text" onChange={(e) => setNombre(e.target.value)} />
+                    </div>
+                    <div className='space-y-2'>
+
+                        <Label htmlFor="nombre">Fecha y Hora: </Label> <span className='text-sm text-gray-500'>Elegí la fecha y hora del evento </span>
+                        <DatePicker setFecha={setFecha} />
+                        <HourPicker />
+                    </div>
                 </div>
-              </div>
             </form>
 
-            <div className='mt-5'>
-
-                <CoverUpload setCoverImage={setCoverImage} coverImage={coverImage}/>
+            <div className={clsx(aSelectIsOpen ? "pointer-events-none mt-5" : "pointer-events-auto mt-5")}>
+                <CoverUpload setCoverImage={setCoverImage} coverImage={coverImage} />
             </div>
 
 
-            <SelectSalon salones={salones}/>
+            <SelectSalon salones={salones} setASelectIsOpen={setASelectIsOpen} />
 
 
-{/* 
+            {/* 
             <div className="mb-4">
                 <label htmlFor="detailImages" className="block text-gray-700">
                     Mas Imágenes
