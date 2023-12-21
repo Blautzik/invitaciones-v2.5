@@ -11,7 +11,8 @@ import Link from 'next/link';
 import { DatePicker} from './DatePicker';
 import { HourPicker } from './hour-picker';
 import { salones } from '@/app/data/salones';
-import SelectSalon from '@/components/component/select-salon'
+import {SelectSalon} from '../component/select-salon'
+
 
 
 
