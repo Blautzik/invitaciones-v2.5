@@ -117,12 +117,12 @@ export function CoverUpload({ setCoverImage, coverImage }) {
           <h2 className="text-2xl font-semibold">Imagen para la Portada</h2>
         </CardHeader>
         <div className='px-4 pb-2'>
-          <span>⚠️</span>  
-          <Link className="underline" href='https://invitacionesjanos.com.ar/6/muestraboda'>
+          <span>⚠️</span>
+          <Link className="underline" href='https://invitacionesjanos.com.ar/6/muestraboda' target='_blank'>
             Mirá el ejemplo:
           </Link>
           <span> Te puede ayudar a encontrar la mejor ubicación de la imagen para que se vea bien con los textos de la portada </span>
-          </div>
+        </div>
         {coverImage ? (
           <div className='w-full'>
             <img
@@ -134,24 +134,27 @@ export function CoverUpload({ setCoverImage, coverImage }) {
             {imageLoaded && (
               <div className='flex justify-center'>
 
-              <Cropper
-                ref={cropperRef}
-                src={URL.createObjectURL(coverImage)}
-                autoCropArea={1}
-                style={{ height: '100%', width: '85%' }}
-                aspectRatio={9 / 16}
-                guides={false}
-                dragMode="move"
-                scalable={true}
-                cropBoxResizable={true}
-                zoomOnWheel={false}
+                <Cropper
+                  ref={cropperRef}
+                  src={URL.createObjectURL(coverImage)}
+                  autoCropArea={1}
+                  style={{ height: '100%', width: '85%' }}
+                  aspectRatio={9 / 16}
+                  guides={false}
+                  dragMode="move"
+                  scalable={true}
+                  cropBoxResizable={true}
+                  zoomOnWheel={false}
                 />
-                </div>
+              </div>
 
             )}
-            <div  className='w-full flex justify-around flex-nowrap'>
+            <div className='w-full flex justify-around flex-nowrap'>
 
-            <Button className="mt-4" variant="outline" onClick={handleCrop}>
+              <Button className="mt-4" variant="outline" onClick={(e) => {
+                e.preventDefault(); // Prevent the default behavior
+                handleCrop();
+              }}>
               Recortar
             </Button>
             <Button className="mt-4" variant="outline" onClick={handleReset}>
@@ -160,41 +163,42 @@ export function CoverUpload({ setCoverImage, coverImage }) {
             <Button className="mt-4" variant="outline" onClick={handleChangeImage}>
               Cambiar de Foto
             </Button>
-            </div>
           </div>
-        ) : (
-         <></>
-        )}
+          </div>
+  ) : (
+    <></>
+  )
+}
 
-        <Label htmlFor="picture-upload">
-          <CardContent className="p-4">
-            <div className="grid w-full items-center gap-4">
-              {
-                !coverImage &&
-                <div
-                  className={`${isDragging
-                    ? 'border-dashed border-2 border-blue-500'
-                    : 'border-dashed border-2 border-gray-300'
-                    } h-64 flex items-center justify-center`}
-                >
-                  <Input
-                    className="sr-only"
-                    id="picture-upload"
-                    type="file"
-                    onChange={handleFileChange}
-                  />
-                  <div className="text-gray-500">
-                    <UploadIcon className="w-8 h-8 mx-auto mb-2" />
-                    <p className='px-4 text-center'>Hace click o arrastra una imagen a este cuadrado para subirla</p>
-                  </div>
-                </div>
-              }
-            </div>
-
-          </CardContent>
-        </Label>
-      </Card>
+<Label htmlFor="picture-upload">
+  <CardContent className="p-4">
+    <div className="grid w-full items-center gap-4">
+      {
+        !coverImage &&
+        <div
+          className={`${isDragging
+            ? 'border-dashed border-2 border-blue-500'
+            : 'border-dashed border-2 border-gray-300'
+            } h-64 flex items-center justify-center`}
+        >
+          <Input
+            className="sr-only"
+            id="picture-upload"
+            type="file"
+            onChange={handleFileChange}
+          />
+          <div className="text-gray-500">
+            <UploadIcon className="w-8 h-8 mx-auto mb-2" />
+            <p className='px-4 text-center'>Hace click o arrastra una imagen a este cuadrado para subirla</p>
+          </div>
+        </div>
+      }
     </div>
+
+  </CardContent>
+</Label>
+      </Card >
+    </div >
   );
 }
 

@@ -9,29 +9,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function SelectSalon({ salones, setASelectIsOpen }) {
-  const [selectedSalon, setSelectedSalon] = useState("");
+export function SelectSalon({ salones, setASelectIsOpen, setSelectedSalon, selectedSalon }) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const ref = useRef(null);
 
 
     const handleSelectTriggerClick = ()=>{
-     
     }
 
   const handleSalonSelect = (salon) => {
-    console.log(salon)
+    console.log("Selected Salon:", salon);
     setSelectedSalon(salon);
   };
 
   return (
     <div>
-      <label>Email</label>
-      <Select onOpenChange={(open) => handleSelectTriggerClick(open)}
-        
+      <Select 
+        onOpenChange={(open) => handleSelectTriggerClick(open)}
+        onValueChange={(value) => handleSalonSelect(value)}
       >
         <SelectTrigger >
-          <SelectValue placeholder="Select a salon" />
+          <SelectValue placeholder="Seleccioná tu salón" />
         </SelectTrigger>
         {isDropdownVisible && (
           <div
@@ -41,7 +39,7 @@ export function SelectSalon({ salones, setASelectIsOpen }) {
               left: 0,
               width: "100%",
               height: "100%",
-              zIndex: 1000, // Adjust the z-index as needed
+              zIndex: 1000, 
             }}
           ></div>
         )}
@@ -52,8 +50,7 @@ export function SelectSalon({ salones, setASelectIsOpen }) {
             <SelectItem
               key={salon.foto_salon}
               value={salon.nombre}
-              onSelect={(e) => {
-                e.stopPropagation();
+              onSelect={() => {
                 handleSalonSelect(salon.nombre);
               }}
             >
@@ -62,13 +59,7 @@ export function SelectSalon({ salones, setASelectIsOpen }) {
           ))}
         </SelectContent>
       </Select>
-      <div>
-        You can manage email addresses in your{" "}
-        <Link href="/examples/forms">email settings</Link>.
-      </div>
-      <Button type="button" onClick={() => console.log("Selected Salon:", selectedSalon)}>
-        Submit
-      </Button>
+      
     </div>
   );
 }
