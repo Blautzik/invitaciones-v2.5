@@ -17,24 +17,24 @@ const page = () => {
 }
 
 
-export async function getServerSideProps(context) {
-  const user = await authenticate();
+// export async function getServerSideProps(context) {
+//   const user = await authenticate();
 
-  if (!user) {
-    // If not authenticated, redirect to the login page
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!user) {
+//     // If not authenticated, redirect to the login page
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  // If authenticated, continue rendering the page
-  return {
-    props: {},
-  };
-}
+//   // If authenticated, continue rendering the page
+//   return {
+//     props: {},
+//   };
+// }
 
 
 export default page
