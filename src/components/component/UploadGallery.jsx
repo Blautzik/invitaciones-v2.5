@@ -86,6 +86,7 @@ const EventForm = () => {
                 hora: selectedHour + ':' + selectedMinute,
                 nombre_salon: selectedSalonObject.nombre,
                 direccion_salon: selectedSalonObject.direccion,
+                link_salon:selectedSalonObject.link,
                 foto_salon: selectedSalonObject.foto_salon,
                 ubicacion_salon: selectedSalonObject.link_maps,
                 galeria: [],

@@ -1,9 +1,6 @@
-import { LoginScreen } from '@/components/component/login-screen'
-import Image from 'next/image'
+
 
 export default function Home() {
-  
-
 
 
   return (

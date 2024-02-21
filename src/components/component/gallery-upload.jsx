@@ -11,7 +11,6 @@ export function GalleryUpload({setGaleria}) {
 
 
   const handleImageClick = (index) => {
-    // Trigger the file input for the specific image
     document.getElementById(`fileInput-${index}`).click();
   };
 
@@ -31,7 +30,6 @@ export function GalleryUpload({setGaleria}) {
       return;
     }
 
-    // Update the specific image in the array
 
     const newImagesToFirestore = [...imagesToFirestore];
     newImagesToFirestore[index] = invalidFile;
