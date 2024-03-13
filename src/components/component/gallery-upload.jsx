@@ -15,6 +15,7 @@ export function GalleryUpload({setGaleria}) {
   };
 
   const handleImageChange = (index, event) => {
+    event.preventDefault();
     const files = event.target.files;
 
     if (files.length !== 1) {
@@ -69,7 +70,10 @@ export function GalleryUpload({setGaleria}) {
             />
             <Button
               className="absolute bottom-0 right-0 bg-black text-white p-2 cursor-pointer"
-              onClick={() => handleImageClick(index)}
+              onClick={(ev) =>{
+                ev.preventDefault()
+                handleImageClick(index)}
+              } 
             >
               {src != 'square-xxl.png' ? `editar foto ${index+1}` : `subir foto ${index+1}` }
 

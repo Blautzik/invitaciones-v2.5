@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { db, storage } from '../../firebase/config';
 import { addDoc, collection, getDocs, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -24,7 +24,6 @@ const EventForm = () => {
     const [selectedSalon, setSelectedSalon] = useState("");
     const [conGaleria, setConGaleria] = useState(true);
     const [conRegalos, setConRegalos] = useState(true);
-
     const [fotoRegalos, setFotoRegalos] = useState();
     const [galeria, setGaleria] = useState([]);
     const [selectedHour, setSelectedHour] = useState('00');
@@ -38,6 +37,34 @@ const EventForm = () => {
     const [fecha, setFecha] = useState('')
     const [coverImage, setCoverImage] = useState(null);
     const [email, setEmail] = useState('')
+    const [creando, setCreando] = useState(false)
+
+
+    const memoizedValues = useMemo(() => {
+    
+        const selectedSalonObject = salones.find(salon => salon.nombre === selectedSalon);
+
+        if (!selectedSalonObject) {
+            console.log('Selected salon not found in the salones array.');
+            return null; // or handle the error appropriately
+        }
+        return {
+            nombre,
+            email,
+            fecha,
+            hora: selectedHour + ':' + selectedMinute,
+            nombre_salon: selectedSalonObject?.nombre || '',
+            direccion_salon: selectedSalonObject?.direccion || '',
+            link_salon: selectedSalonObject?.link || '',
+            foto_salon: selectedSalonObject?.foto_salon || '',
+            ubicacion_salon: selectedSalonObject?.link_maps || '',
+            galeria,
+            alias,
+            cbu,
+            titular,
+            frase,
+        };
+    }, [nombre, email, fecha, selectedHour, selectedMinute, selectedSalon, galeria, alias, cbu, titular, frase]);
 
 
     const fetchProducts = async () => {
@@ -69,16 +96,24 @@ const EventForm = () => {
 
     const handleCreateProduct = async () => {
         try {
+            setCreando(true);
             const eventRef = collection(db, 'clientes');
-
+    
             if (!nombre || !fecha || !selectedSalon) {
                 alert('Please fill in all required fields.');
+                setCreando(false);
                 return;
             }
-
-
+    
             const selectedSalonObject = salones.find(salon => salon.nombre === selectedSalon);
-
+    
+            if (!selectedSalonObject) {
+                alert('Selected salon not found in the salones array.');
+                setCreando(false);
+                return;
+            }
+            console.log("Selected Salon Object:", selectedSalonObject);
+    
             const newEvent = {
                 nombre,
                 email,
@@ -86,7 +121,7 @@ const EventForm = () => {
                 hora: selectedHour + ':' + selectedMinute,
                 nombre_salon: selectedSalonObject.nombre,
                 direccion_salon: selectedSalonObject.direccion,
-                link_salon:selectedSalonObject.link,
+                link_salon: selectedSalonObject.link,
                 foto_salon: selectedSalonObject.foto_salon,
                 ubicacion_salon: selectedSalonObject.link_maps,
                 galeria: [],
@@ -95,64 +130,50 @@ const EventForm = () => {
                 titular,
                 frase,
             };
-
-
+    
             const docRef = await addDoc(eventRef, newEvent);
-
-
-            if (!selectedSalonObject) {
-                alert('Selected salon not found in the salones array.');
-                return;
-            }
-
-
+    
             if (coverImage) {
                 const storageRef = ref(storage, `images/${docRef.id}/${coverImage.name}`);
                 await uploadBytes(storageRef, coverImage);
                 newEvent.fotoPortada = await getDownloadURL(storageRef);
-                console.log(newEvent.fotoPortada)
+                console.log(newEvent.fotoPortada);
             }
-
+    
             if (fotoRegalos) {
                 const storageRef = ref(storage, `images/${docRef.id}/${fotoRegalos.name}`);
                 await uploadBytes(storageRef, fotoRegalos);
                 newEvent.fotoRegalos = await getDownloadURL(storageRef);
-                console.log(newEvent.fotoRegalos)
+                console.log(newEvent.fotoRegalos);
             }
+            
             if (fotofinal) {
                 const storageRef = ref(storage, `images/${docRef.id}/${fotofinal.name}`);
                 await uploadBytes(storageRef, fotofinal);
                 newEvent.fotoFinal = await getDownloadURL(storageRef);
-                console.log(newEvent.fotoFinal)
+                console.log(newEvent.fotoFinal);
             }
-
-
-            console.log(galeria)
-
-
+    
             const storagePromises = galeria.map(async (image, index) => {
                 const storageRef = ref(storage, `images/${docRef.id}/galleryImage${index + 1}`);
                 await uploadBytes(storageRef, image);
                 return getDownloadURL(storageRef);
             });
-
-
+    
             newEvent.galeria = await Promise.all(storagePromises);
-
-            // await updateDoc(docRef, { galeria: imageUrls });
-
+    
             await setDoc(docRef, newEvent, { merge: true });
-
+    
             setNombre('');
             setCoverImage(null);
-
+            setCreando(false);
+    
             alert('Invitación creada exitosamente!');
-
         } catch (error) {
             console.error('Error creating product: ', error);
+            setCreando(false);
         }
     };
-
 
     return (
         <div className="bg-gray-100 rounded-lg shadow-lg max-w-lg mx-auto">
@@ -215,7 +236,7 @@ const EventForm = () => {
                 <FotoFinal setFotofinal={setFotofinal} />
                 <div className='w-full flex items-center justify-center'>
 
-                    <button onClick={handleCreateProduct} className="bg-black mt-6 mb-12 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">Crear Invitación</button>
+                    <button onClick={handleCreateProduct} disabled={creando} className="bg-black mt-6 mb-12 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">{creando? 'Creando invitación': 'Crear Invitación'}</button>
                 </div>
             </form>
         </div>

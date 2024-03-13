@@ -24,6 +24,7 @@ export function CoverUpload({ setCoverImage, coverImage }) {
         const croppedImage = croppedCanvas.toDataURL();
         setCoverImage(dataURItoBlob(croppedImage));
         console.log('Cropped Image:', croppedImage);
+        setCropImage(croppedImage)
       } else {
         console.error('getCroppedCanvas returned null or undefined.');
       }
@@ -34,16 +35,12 @@ export function CoverUpload({ setCoverImage, coverImage }) {
 
   const handleReset = () => {
     if (cropperRef.current && cropperRef.current.cropper) {
-      // Reset the cropper to the original image size
       cropperRef.current.cropper.reset();
-
-      // Reset the cover image to the original image
       setCoverImage(originalImage);
     }
   };
 
   const handleChangeImage = () => {
-    // Reset states
     setOriginalImage(null);
     setCoverImage(null);
     setImageLoaded(false);
@@ -97,10 +94,10 @@ export function CoverUpload({ setCoverImage, coverImage }) {
         setImageLoaded(false);
         console.log('Valid image file:', file);
       } else {
-        alert('Please select a valid image file.');
+        alert('selecciona un archivo de imagen válido');
       }
     } else {
-      alert('Please select only one file.');
+      alert('selecciona un único archivo');
     }
   };
 
@@ -150,53 +147,56 @@ export function CoverUpload({ setCoverImage, coverImage }) {
 
             )}
             <div className='w-full flex justify-around flex-nowrap'>
+              <div>
 
-              <Button className="mt-4" variant="outline" onClick={(e) => {
-                e.preventDefault(); // Prevent the default behavior
-                handleCrop();
-              }}>
-              Recortar
-            </Button>
-            <Button className="mt-4" variant="outline" onClick={handleReset}>
-              Deshacer
-            </Button>
-            <Button className="mt-4" variant="outline" onClick={handleChangeImage}>
-              Cambiar de Foto
-            </Button>
-          </div>
-          </div>
-  ) : (
-    <></>
-  )
-}
+                <Button className="mt-4" variant="outline" onClick={(e) => {
+                  e.preventDefault();
+                  handleCrop();
+                }}>
+                  Recortar
+                </Button>
 
-<Label htmlFor="picture-upload">
-  <CardContent className="p-4">
-    <div className="grid w-full items-center gap-4">
-      {
-        !coverImage &&
-        <div
-          className={`${isDragging
-            ? 'border-dashed border-2 border-blue-500'
-            : 'border-dashed border-2 border-gray-300'
-            } h-64 flex items-center justify-center`}
-        >
-          <Input
-            className="sr-only"
-            id="picture-upload"
-            type="file"
-            onChange={handleFileChange}
-          />
-          <div className="text-gray-500">
-            <UploadIcon className="w-8 h-8 mx-auto mb-2" />
-            <p className='px-4 text-center'>Hace click o arrastra una imagen a este cuadrado para subirla</p>
+              </div>
+              <Button className="mt-4" variant="outline" onClick={handleReset}>
+                Deshacer
+              </Button>
+              <Button className="mt-4" variant="outline" onClick={handleChangeImage}>
+                Cambiar de Foto
+              </Button>
+            </div>
           </div>
-        </div>
-      }
-    </div>
+        ) : (
+          <></>
+        )
+        }
 
-  </CardContent>
-</Label>
+        <Label htmlFor="picture-upload">
+          <CardContent className="p-4">
+            <div className="grid w-full items-center gap-4">
+              {
+                !coverImage &&
+                <div
+                  className={`${isDragging
+                    ? 'border-dashed border-2 border-blue-500'
+                    : 'border-dashed border-2 border-gray-300'
+                    } h-64 flex items-center justify-center`}
+                >
+                  <Input
+                    className="sr-only"
+                    id="picture-upload"
+                    type="file"
+                    onChange={handleFileChange}
+                  />
+                  <div className="text-gray-500">
+                    <UploadIcon className="w-8 h-8 mx-auto mb-2" />
+                    <p className='px-4 text-center'>Hace click o arrastra una imagen a este cuadrado para subirla</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+          </CardContent>
+        </Label>
       </Card >
     </div >
   );
